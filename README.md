@@ -1,7 +1,6 @@
-# Participatory Mangrove Monitoring System
+# PROBLEM STATEMENT 6
 
-## Overview
-A full-stack web application for participatory mangrove monitoring, reporting, and verification. Built for hackathons and real-world deployment.
+
 
 **Features:**
 - Reporter: Submit incidents with geotag, photo, and description
