@@ -80,18 +80,18 @@ function ReporterIncidentForm({ token, onLogout }) {
             <svg className="absolute inset-0 w-full h-full pointer-events-none animate-pulse-slow" viewBox="0 0 1440 900" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                     <linearGradient id="motivate" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="#bbf7d0"/>
-                        <stop offset="100%" stopColor="#fef9c3"/>
+                        <stop offset="0%" stopColor="#bbf7d0" />
+                        <stop offset="100%" stopColor="#fef9c3" />
                     </linearGradient>
                 </defs>
-                <ellipse cx="720" cy="850" rx="700" ry="80" fill="url(#motivate)" opacity="0.3"/>
-                <circle cx="200" cy="200" r="60" fill="#a7f3d0" opacity="0.12"/>
-                <circle cx="1240" cy="300" r="80" fill="#fbbf24" opacity="0.10"/>
+                <ellipse cx="720" cy="850" rx="700" ry="80" fill="url(#motivate)" opacity="0.3" />
+                <circle cx="200" cy="200" r="60" fill="#a7f3d0" opacity="0.12" />
+                <circle cx="1240" cy="300" r="80" fill="#fbbf24" opacity="0.10" />
             </svg>
             <form className="relative z-10 max-w-lg w-full mx-auto p-10 bg-white/80 backdrop-blur-2xl rounded-3xl shadow-2xl border-4 border-green-200 flex flex-col items-center" onSubmit={handleSubmit}>
                 <div className="mb-6 text-center">
                     <div className="flex justify-center mb-2">
-                        <svg width="48" height="48" fill="none" viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#bbf7d0"/><path d="M24 34c-6-4-10-8-10-13a10 10 0 1120 0c0 5-4 9-10 13z" fill="#22c55e"/></svg>
+                        <svg width="48" height="48" fill="none" viewBox="0 0 48 48"><circle cx="24" cy="24" r="24" fill="#bbf7d0" /><path d="M24 34c-6-4-10-8-10-13a10 10 0 1120 0c0 5-4 9-10 13z" fill="#22c55e" /></svg>
                     </div>
                     <h2 className="text-3xl font-extrabold text-green-700 mb-1">Be a Mangrove Hero!</h2>
                     <p className="text-lg text-green-800 font-semibold">Every report helps protect our environment 🌍</p>

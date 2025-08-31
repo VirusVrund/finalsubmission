@@ -39,7 +39,7 @@ export default function VerifierDashboard({ token }) {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-green-50 to-orange-50 py-8">
-  <div className="max-w-4xl mx-auto p-8 bg-white/90 rounded-2xl shadow-xl border-2 border-green-400">
+      <div className="max-w-4xl mx-auto p-8 bg-white/90 rounded-2xl shadow-xl border-2 border-green-400">
         <div className="mb-8 text-center">
           <h1 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-orange-500 via-fuchsia-600 to-blue-700 drop-shadow-2xl">Mangrove Guardian</h1>
           <p className="mt-2 text-lg font-semibold text-purple-700 drop-shadow">Verifier Dashboard</p>

@@ -52,13 +52,13 @@ export default function AuthForm({ onAuth }) {
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-blue-200 via-violet-100 to-orange-100">
       {/* Logo and heading row */}
       <div className="flex items-center w-full max-w-md mt-8 mb-10">
-  <img src="/assets/logo.png" alt="Logo" className="h-48 w-48 object-contain mr-8 rounded-3xl shadow-xl border-2 border-fuchsia-300 bg-white" />
+        <img src="/assets/logo.png" alt="Logo" className="h-48 w-48 object-contain mr-8 rounded-3xl shadow-xl border-2 border-fuchsia-300 bg-white" />
         <div>
           <h1 className="text-4xl sm:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-orange-500 via-fuchsia-600 to-blue-700 drop-shadow-2xl">Mangrove Guardian</h1>
           <p className="mt-1 text-lg sm:text-xl font-semibold text-gray-700 italic">The unseen machinery that keeps time alive.</p>
         </div>
       </div>
-  <div className="w-full max-w-md p-10 bg-white/90 rounded-2xl shadow-xl border-2 border-green-400 z-10 mx-auto">
+      <div className="w-full max-w-md p-10 bg-white/90 rounded-2xl shadow-xl border-2 border-green-400 z-10 mx-auto">
         <h2 className="text-3xl font-extrabold text-orange-700 mb-6 text-center drop-shadow">{isLogin ? 'Login' : 'Register'}</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <input

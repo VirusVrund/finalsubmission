@@ -67,22 +67,22 @@ export default function GovernmentDashboard({ token, onLogout }) {
       <div className="relative h-[340px] md:h-[420px] overflow-hidden flex items-center justify-center">
         {/* Foggy/uncertainty animated overlay */}
         <div className="pointer-events-none absolute inset-0 z-20">
-          <svg className="w-full h-full" viewBox="0 0 1440 400" fill="none" xmlns="http://www.w3.org/2000/svg" style={{opacity:0.45}}>
+          <svg className="w-full h-full" viewBox="0 0 1440 400" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ opacity: 0.45 }}>
             <defs>
               <linearGradient id="fog1" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#e0e7ef" stopOpacity="0.7"/>
-                <stop offset="100%" stopColor="#cbd5e1" stopOpacity="0.2"/>
+                <stop offset="0%" stopColor="#e0e7ef" stopOpacity="0.7" />
+                <stop offset="100%" stopColor="#cbd5e1" stopOpacity="0.2" />
               </linearGradient>
               <linearGradient id="fog2" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stopColor="#b6bbc7" stopOpacity="0.5"/>
-                <stop offset="100%" stopColor="#64748b" stopOpacity="0.1"/>
+                <stop offset="0%" stopColor="#b6bbc7" stopOpacity="0.5" />
+                <stop offset="100%" stopColor="#64748b" stopOpacity="0.1" />
               </linearGradient>
             </defs>
             <ellipse cx="720" cy="120" rx="700" ry="80" fill="url(#fog1)">
-              <animate attributeName="cy" values="120;140;120" dur="7s" repeatCount="indefinite"/>
+              <animate attributeName="cy" values="120;140;120" dur="7s" repeatCount="indefinite" />
             </ellipse>
             <ellipse cx="900" cy="200" rx="600" ry="60" fill="url(#fog2)">
-              <animate attributeName="cy" values="200;220;200" dur="9s" repeatCount="indefinite"/>
+              <animate attributeName="cy" values="200;220;200" dur="9s" repeatCount="indefinite" />
             </ellipse>
           </svg>
         </div>
@@ -90,36 +90,36 @@ export default function GovernmentDashboard({ token, onLogout }) {
         <svg className="absolute top-0 left-0 w-full h-full animate-pulse" viewBox="0 0 1440 400" fill="none" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <linearGradient id="mangrove1" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#a7f3d0"/>
-              <stop offset="100%" stopColor="#fcd34d"/>
+              <stop offset="0%" stopColor="#a7f3d0" />
+              <stop offset="100%" stopColor="#fcd34d" />
             </linearGradient>
             <linearGradient id="mangrove2" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="#f472b6"/>
-              <stop offset="100%" stopColor="#60a5fa"/>
+              <stop offset="0%" stopColor="#f472b6" />
+              <stop offset="100%" stopColor="#60a5fa" />
             </linearGradient>
           </defs>
-          <path d="M0,320 Q360,200 720,320 T1440,320 V400 H0Z" fill="url(#mangrove1)" opacity="0.7"/>
-          <path d="M0,360 Q400,260 900,360 T1440,360 V400 H0Z" fill="url(#mangrove2)" opacity="0.5"/>
+          <path d="M0,320 Q360,200 720,320 T1440,320 V400 H0Z" fill="url(#mangrove1)" opacity="0.7" />
+          <path d="M0,360 Q400,260 900,360 T1440,360 V400 H0Z" fill="url(#mangrove2)" opacity="0.5" />
         </svg>
         {/* Floating mangrove SVGs */}
-        <svg style={{position:'absolute',left:'10%',top:`${180+10*Math.sin(float/30)}px`,zIndex:2,transition:'top 0.2s'}} width="80" height="120" viewBox="0 0 80 120" fill="none">
-          <ellipse cx="40" cy="110" rx="30" ry="10" fill="#a7f3d0"/>
-          <rect x="35" y="60" width="10" height="50" rx="5" fill="#047857"/>
-          <circle cx="40" cy="60" r="25" fill="#22d3ee"/>
-          <ellipse cx="40" cy="60" rx="18" ry="10" fill="#bbf7d0"/>
+        <svg style={{ position: 'absolute', left: '10%', top: `${180 + 10 * Math.sin(float / 30)}px`, zIndex: 2, transition: 'top 0.2s' }} width="80" height="120" viewBox="0 0 80 120" fill="none">
+          <ellipse cx="40" cy="110" rx="30" ry="10" fill="#a7f3d0" />
+          <rect x="35" y="60" width="10" height="50" rx="5" fill="#047857" />
+          <circle cx="40" cy="60" r="25" fill="#22d3ee" />
+          <ellipse cx="40" cy="60" rx="18" ry="10" fill="#bbf7d0" />
         </svg>
-        <svg style={{position:'absolute',left:'70%',top:`${200+12*Math.cos(float/40)}px`,zIndex:2,transition:'top 0.2s'}} width="90" height="130" viewBox="0 0 90 130" fill="none">
-          <ellipse cx="45" cy="120" rx="35" ry="12" fill="#fcd34d"/>
-          <rect x="40" y="70" width="10" height="50" rx="5" fill="#b91c1c"/>
-          <circle cx="45" cy="70" r="28" fill="#f472b6"/>
-          <ellipse cx="45" cy="70" rx="20" ry="12" fill="#fef9c3"/>
+        <svg style={{ position: 'absolute', left: '70%', top: `${200 + 12 * Math.cos(float / 40)}px`, zIndex: 2, transition: 'top 0.2s' }} width="90" height="130" viewBox="0 0 90 130" fill="none">
+          <ellipse cx="45" cy="120" rx="35" ry="12" fill="#fcd34d" />
+          <rect x="40" y="70" width="10" height="50" rx="5" fill="#b91c1c" />
+          <circle cx="45" cy="70" r="28" fill="#f472b6" />
+          <ellipse cx="45" cy="70" rx="20" ry="12" fill="#fef9c3" />
         </svg>
         <div className="relative z-10 text-center">
           <h1 className="text-5xl md:text-6xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-gray-700 via-gray-500 to-gray-900 drop-shadow-2xl animate-fade-in">Mangrove Guardian</h1>
           <p className="mt-4 text-2xl md:text-3xl font-bold text-gray-800 drop-shadow animate-fade-in delay-200">Government Dashboard</p>
           <div className="mt-6 mx-auto max-w-2xl text-gray-800 bg-white/30 backdrop-blur-md rounded-2xl p-4 shadow-xl border-2 border-gray-300 animate-fade-in delay-400">
             <p>
-              <span className="font-bold text-gray-700">Explore, filter, and export</span> verified mangrove incidents.<br/>
+              <span className="font-bold text-gray-700">Explore, filter, and export</span> verified mangrove incidents.<br />
               Use the interactive map and table to monitor and analyze incident trends for better policy and action.
             </p>
           </div>
@@ -128,9 +128,9 @@ export default function GovernmentDashboard({ token, onLogout }) {
         </div>
       </div>
       {/* Dashboard Card with Glassmorphism */}
-  <div className="max-w-6xl mx-auto -mt-8 md:-mt-16 p-8 bg-white/90 rounded-2xl shadow-xl border-2 border-green-400">
-  <h2 className="text-2xl font-bold mb-6 text-gray-700 text-center animate-fade-in delay-700">Verified Incidents Map</h2>
-  <div className="flex flex-wrap gap-4 mb-6 justify-center animate-fade-in delay-1000">
+      <div className="max-w-6xl mx-auto -mt-8 md:-mt-16 p-8 bg-white/90 rounded-2xl shadow-xl border-2 border-green-400">
+        <h2 className="text-2xl font-bold mb-6 text-gray-700 text-center animate-fade-in delay-700">Verified Incidents Map</h2>
+        <div className="flex flex-wrap gap-4 mb-6 justify-center animate-fade-in delay-1000">
           <select value={status} onChange={e => setStatus(e.target.value)} className="p-2 border-2 border-gray-300 rounded-lg bg-gray-100/80 text-gray-900 font-semibold shadow-md">
             <option value="verified">Verified</option>
             <option value="pending">Pending</option>
@@ -147,7 +147,7 @@ export default function GovernmentDashboard({ token, onLogout }) {
           <input type="date" value={to} onChange={e => setTo(e.target.value)} className="p-2 border-2 border-gray-300 rounded-lg bg-gray-100/80 text-gray-900 font-semibold shadow-md" />
           <button onClick={handleExport} className="bg-gradient-to-r from-gray-700 to-gray-500 hover:from-gray-800 hover:to-gray-600 text-white px-6 py-2 rounded-lg font-bold shadow-xl animate-glow">Export CSV</button>
         </div>
-  <div className="mb-8 rounded-xl overflow-hidden border-2 border-gray-300 animate-fade-in delay-1200 shadow-xl">
+        <div className="mb-8 rounded-xl overflow-hidden border-2 border-gray-300 animate-fade-in delay-1200 shadow-xl">
           <MapContainer center={defaultCenter} zoom={10} style={{ height: '400px', width: '100%' }}>
             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
             {incidents.map(inc => (
