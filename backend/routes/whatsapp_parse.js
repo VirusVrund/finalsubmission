@@ -1,6 +1,5 @@
 import express from 'express';
 import { createClient } from '@supabase/supabase-js';
-// import fetch from 'node-fetch'; // Uncomment if using node-fetch for Gemini API
 
 const router = express.Router();
 const supabase = createClient(
@@ -8,78 +7,88 @@ const supabase = createClient(
     process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
-// POST /api/whatsapp/parse-unprocessed
-router.post('/parse-unprocessed', async (req, res) => {
+// Helper: get or create reporter_id for a given from_phone
+async function getOrCreateReporterId(from_phone) {
+    // Try to find existing reporter_id
+    let { data, error } = await supabase
+        .from('whatsapp_reporters')
+        .select('reporter_id')
+        .eq('from_phone', from_phone)
+        .single();
+    if (data && data.reporter_id) return data.reporter_id;
+    // If not found, create new
+    ({ data, error } = await supabase
+        .from('whatsapp_reporters')
+        .insert([{ from_phone }])
+        .select('reporter_id')
+        .single());
+    if (data && data.reporter_id) return data.reporter_id;
+    throw new Error('Could not get or create reporter_id');
+}
+
+// POST /api/whatsapp/process-message
+// Body: { from_phone, body, photo_url }
+router.post('/process-message', async (req, res) => {
+    const { from_phone, body, photo_url } = req.body;
+    if (!from_phone || !body) return res.status(400).json({ error: 'from_phone and body required' });
     try {
-        // 1. Fetch unprocessed WhatsApp messages
-        const { data: messages, error } = await supabase
-            .from('whatsapp_reports')
-            .select('id, body')
-            .is('parsed_fields', null)
-            .limit(10); // Limit for batch processing
-        if (error) return res.status(500).json({ error: error.message });
-        if (!messages.length) return res.json({ message: 'No unprocessed messages.' });
+        // 1. Get or create reporter_id
+        const reporter_id = await getOrCreateReporterId(from_phone);
 
-        // 2. Prepare data for Gemini
-        const geminiInputs = messages.map(msg => ({
-            id: msg.id,
-            prompt: `Extract incident details from this WhatsApp message: "${msg.body}". Return JSON with fields: description, category, location, date, and any other relevant info.`
-        }));
-
-        // 3. (Placeholder) Send to Gemini API for parsing
-        // const geminiResults = await Promise.all(geminiInputs.map(async input => {
-        //   // Replace with actual Gemini API call
-        //   const response = await fetch('https://gemini-api-endpoint', { ... });
-        //   return { id: input.id, parsed: await response.json() };
-        // }));
-
-        // 4. (For now) Just return the prompts for review
-        res.json({ geminiInputs });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-});
-
-// POST /api/whatsapp/process-parsed
-// Body: { id, parsed_fields }
-router.post('/process-parsed', async (req, res) => {
-    const { id, parsed_fields } = req.body;
-    if (!id || !parsed_fields) {
-        return res.status(400).json({ error: 'id and parsed_fields required' });
-    }
-    try {
-        // 1. Update whatsapp_reports row
-        const { error: updateError } = await supabase
-            .from('whatsapp_reports')
-            .update({ parsed_fields })
-            .eq('id', id);
-        if (updateError) {
-            return res.status(500).json({ error: updateError.message });
+        // 2. Call Gemini API for description and category
+        const geminiPrompt = `Clean and summarize this WhatsApp message as a mangrove incident report. Classify it as one of: Illegal Cutting, Land Reclamation, Pollution, Other.\nMessage: "${body}"\nReturn JSON: { description, category }`;
+        let geminiData;
+        try {
+            const geminiRes = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyDt2jBly4qwwNwpubmS6HsLNO2agGm2uKI', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ contents: [{ parts: [{ text: geminiPrompt }] }] })
+            });
+            geminiData = await geminiRes.json();
+        } catch (e) {
+            console.error('Gemini API call failed:', e);
+            return res.status(500).json({ error: 'Gemini API call failed', details: e.toString() });
+        }
+        let description = '', category = '';
+        try {
+            let text = geminiData.candidates?.[0]?.content?.parts?.[0]?.text || '';
+            // Remove Markdown code block if present
+            text = text.trim();
+            if (text.startsWith('```json')) {
+                text = text.replace(/^```json[\r\n]+/, '').replace(/```$/, '').trim();
+            } else if (text.startsWith('```')) {
+                text = text.replace(/^```[\w]*[\r\n]+/, '').replace(/```$/, '').trim();
+            }
+            const parsed = JSON.parse(text);
+            description = parsed.description || '';
+            category = parsed.category || '';
+        } catch (e) {
+            console.error('Gemini parsing failed:', e, 'Gemini response:', geminiData);
+            return res.status(500).json({ error: 'Gemini parsing failed', geminiData });
         }
 
-        // 2. Insert into incidents table (map fields as needed)
-        // Example: description, category, location, date, photo_url
-        const { description, category, location, date, photo_url } = parsed_fields;
-        const { error: insertError } = await supabase
-            .from('incidents')
-            .insert([
-                {
-                    description: description || '',
-                    category: category || '',
-                    latitude: location?.latitude || null,
-                    longitude: location?.longitude || null,
-                    created_at: date || new Date().toISOString(),
-                    photo_url: photo_url || null,
-                    status: 'pending',
-                    source: 'whatsapp'
-                }
-            ]);
+        // 3. Insert into incidents table
+        const { error: insertError } = await supabase.from('incidents').insert([
+            {
+                reporter_id,
+                description,
+                category,
+                latitude: 0,
+                longitude: 0,
+                photo_url: photo_url || null,
+                status: 'pending',
+                created_at: new Date().toISOString(),
+                source: 'whatsapp'
+            }
+        ]);
         if (insertError) {
+            console.error('Incident insert failed:', insertError.message);
             return res.status(500).json({ error: insertError.message });
         }
 
-        res.json({ success: true });
+        res.json({ success: true, reporter_id, description, category });
     } catch (err) {
+        console.error('Unexpected error in /process-message:', err);
         res.status(500).json({ error: err.message });
     }
 });

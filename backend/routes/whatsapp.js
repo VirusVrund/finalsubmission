@@ -38,6 +38,21 @@ router.post('/webhook', async (req, res) => {
         console.error('Supabase insert error:', error.message);
         return res.status(500).json({ error: error.message });
     }
+    // Trigger process-message automatically
+    try {
+        await fetch('http://localhost:5000/api/whatsapp/process-message', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                from_phone: From,
+                body: Body,
+                photo_url
+            })
+        });
+    } catch (e) {
+        // Log but do not fail webhook
+        console.error('Failed to trigger process-message:', e);
+    }
     res.json({ success: true });
 });
 

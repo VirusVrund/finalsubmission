@@ -13,12 +13,13 @@ const supabase = createClient(
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-// GET /api/incidents?status=pending (Verifier & Government)
+// GET /api/incidents?status=pending&category=Pollution (Verifier & Government)
 router.get('/', requireAuth, requireAnyRole(['Verifier', 'Government']), async (req, res) => {
     try {
-        const { status } = req.query;
+        const { status, category } = req.query;
         let query = supabase.from('incidents').select('*');
         if (status) query = query.eq('status', status);
+        if (category) query = query.eq('category', category);
         const { data, error } = await query;
         if (error) return res.status(500).json({ error: 'Failed to fetch incidents' });
         res.json({ incidents: data });
@@ -32,6 +33,7 @@ router.post('/:id/verify', requireAuth, requireRole('Verifier'), async (req, res
     try {
         const { notes } = req.body;
         const { id } = req.params;
+        // 1. Update incident status
         const { data, error } = await supabase.from('incidents').update({
             status: 'verified',
             verifier_id: req.user.id,
@@ -39,7 +41,15 @@ router.post('/:id/verify', requireAuth, requireRole('Verifier'), async (req, res
             verifier_notes: notes || null
         }).eq('id', id).select();
         if (error) return res.status(500).json({ error: 'Verification failed' });
-        res.json({ success: true, incident: data ? data[0] : null });
+        // 2. Reward reporter if incident is verified
+        const incident = data && data[0];
+        if (incident && incident.reporter_id) {
+            await supabase.rpc('increment_reporter_points', {
+                reporter_id_input: incident.reporter_id,
+                points_input: 10
+            });
+        }
+        res.json({ success: true, incident: incident });
     } catch (err) {
         res.status(500).json({ error: 'Server error' });
     }

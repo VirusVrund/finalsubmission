@@ -3,6 +3,7 @@ import authRoutes from './routes/auth.js';
 import incidentsRoutes from './routes/incidents.js';
 import whatsappRoutes from './routes/whatsapp.js';
 import whatsappParseRoutes from './routes/whatsapp_parse.js';
+import reporterRoutes from './routes/reporter.js';
 import express from 'express';
 import cors from 'cors';
 import { createClient } from '@supabase/supabase-js';
@@ -23,7 +24,6 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'API running' });
 });
 
-
 // ✅ Mount Auth routes
 app.use('/api/auth', authRoutes);
 
@@ -35,6 +35,9 @@ app.use('/api/whatsapp', whatsappRoutes);
 
 // ✅ Mount WhatsApp parse route (for Gemini integration)
 app.use('/api/whatsapp', whatsappParseRoutes);
+
+// ✅ Mount Reporter routes
+app.use('/api/reporter', reporterRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
